@@ -14,12 +14,9 @@ import { focus, keycodes } from '@wordpress/utils';
  * Internal dependencies
  */
 import './style.scss';
-import withFocusReturn from '../higher-order/with-focus-return';
 import PopoverDetectOutside from './detect-outside';
 import IconButton from '../icon-button';
 import { Slot, Fill } from '../slot-fill';
-
-const FocusManaged = withFocusReturn( ( { children } ) => children );
 
 const { ESCAPE } = keycodes;
 
@@ -35,7 +32,7 @@ class Popover extends Component {
 	constructor() {
 		super( ...arguments );
 
-		this.focus = this.focus.bind( this );
+		this.focusFirstTabbable = this.focusFirstTabbable.bind( this );
 		this.bindNode = this.bindNode.bind( this );
 		this.getAnchorRect = this.getAnchorRect.bind( this );
 		this.setOffset = this.setOffset.bind( this );
@@ -55,7 +52,11 @@ class Popover extends Component {
 		this.setOffset();
 		this.setForcedPositions();
 		this.toggleWindowEvents( true );
-		this.focus();
+
+		const { focusOnMount = true } = this.props;
+		if ( focusOnMount ) {
+			this.focusFirstTabbable();
+		}
 	}
 
 	componentWillReceiveProps( nextProps ) {
@@ -92,24 +93,17 @@ class Popover extends Component {
 		window[ handler ]( 'scroll', this.throttledSetOffset, true );
 	}
 
-	focus() {
-		const { focusOnMount = true } = this.props;
-		if ( ! focusOnMount ) {
-			return;
-		}
-
+	/**
+	 * Shifts focus to the first tabbable element within popover content, if
+	 * any exist.
+	 */
+	focusFirstTabbable() {
 		const { content } = this.nodes;
-		if ( ! content ) {
-			return;
-		}
 
-		// Find first tabbable node within content and shift focus, falling
-		// back to the popover panel itself.
+		// Find first tabbable node within content and shift focus.
 		const firstTabbable = focus.tabbable.find( content )[ 0 ];
 		if ( firstTabbable ) {
 			firstTabbable.focus();
-		} else {
-			content.focus();
 		}
 	}
 
@@ -242,7 +236,6 @@ class Popover extends Component {
 			onClose,
 			children,
 			className,
-			onClickOutside = onClose,
 			// Disable reason: We generate the `...contentProps` rest as remainder
 			// of props which aren't explicitly handled by this component.
 			/* eslint-disable no-unused-vars */
@@ -251,6 +244,7 @@ class Popover extends Component {
 			focusOnMount,
 			getAnchorRect,
 			expandOnMobile,
+			focusFirstTabbable,
 			/* eslint-enable no-unused-vars */
 			...contentProps
 		} = this.props;
@@ -271,7 +265,7 @@ class Popover extends Component {
 
 		/* eslint-disable jsx-a11y/no-static-element-interactions */
 		let content = (
-			<PopoverDetectOutside onClickOutside={ onClickOutside }>
+			<PopoverDetectOutside onFocusOutside={ onClose }>
 				<div
 					ref={ this.bindNode( 'popover' ) }
 					className={ classes }
@@ -294,12 +288,6 @@ class Popover extends Component {
 			</PopoverDetectOutside>
 		);
 		/* eslint-enable jsx-a11y/no-static-element-interactions */
-
-		// Apply focus return behavior except when default focus on open
-		// behavior is disabled.
-		if ( false !== focusOnMount ) {
-			content = <FocusManaged>{ content }</FocusManaged>;
-		}
 
 		// In case there is no slot context in which to render, default to an
 		// in-place rendering.
