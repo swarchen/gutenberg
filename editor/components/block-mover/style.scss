@@ -1,3 +1,14 @@
+.editor-block-mover {
+	background: rgba(255,0,0,.1); // debug
+	height: 100%; // increase hoverable area
+
+	// elevate when selected or hovered
+	.is-selected &,
+	.is-hovered & {
+		z-index: 9999;	// @todo
+	}
+}
+
 // Mover icon buttons
 .editor-block-mover__control {
 	display: block;

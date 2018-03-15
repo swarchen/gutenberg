@@ -5,6 +5,12 @@
 		padding-left: $block-side-ui-padding;
 		padding-right: $block-side-ui-padding;
 	}
+
+	// Don't add side padding for nested blocks, @todo see if this can be scoped better
+	.editor-block-list__block & {
+		padding-left: 0;
+		padding-right: 0;
+	}
 }
 
 .editor-block-list__layout .editor-block-list__block {
