@@ -337,12 +337,13 @@
 		padding: 0;
 		width: $block-side-ui-width;
 		height: 100%; // increase hoverable area
+	}
 
-		background: rgba(255,0,0,.1); // debug
-
-		// elevate when selected or hovered
-		.is-selected &,
-		.is-hovered & {
+	// Elevate when selected or hovered
+	&.is-selected,
+	&.is-hovered {
+		.editor-block-settings-menu,
+		.editor-block-mover {
 			z-index: 9999;	// @todo
 		}
 	}

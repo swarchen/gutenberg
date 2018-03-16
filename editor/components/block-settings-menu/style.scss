@@ -5,7 +5,13 @@
 	width: $block-side-ui-width;
 	height: $block-side-ui-width * 2;	// same height as a single line of text, our smallest block
 
-	background: pink;	// debug
+	// Try a background, only for nested situations @todo
+	.editor-block-list__layout .editor-block-list__layout & {
+		background: $white;
+		border-color: $light-gray-500;
+		border-style: solid;
+		border-width: 1px;
+	}
 
 	.dashicon {
 		transform: rotate( 90deg );

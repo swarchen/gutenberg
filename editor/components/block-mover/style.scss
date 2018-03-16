@@ -16,7 +16,19 @@
 		pointer-events: none;
 	}
 
-	background: pink;	// debug
+	// Try a background, only for nested situations @todo
+	.editor-block-list__layout .editor-block-list__layout & {
+		background: $white;
+		border-color: $light-gray-500;
+		border-style: solid;
+
+		&:first-child {
+			border-width: 1px 1px 0 1px;
+		}
+		&:last-child {
+			border-width: 0 1px 1px 1px;
+		}
+	}
 
 	// apply styles to SVG for movers on the desktop breakpoint
 	@include break-small {
