@@ -84,7 +84,13 @@
 	&.is-selected > .editor-block-mover:before,
 	&.is-hovered > .editor-block-mover:before {
 		border-right: 1px solid $light-gray-500;
-		right: 6px;
+		right: 0;
+	}
+
+	&.is-selected > .editor-block-settings-menu:before,
+	&.is-hovered > .editor-block-settings-menu:before {
+		border-left: 1px solid $light-gray-500;
+		left: 0;
 	}
 
 	&.is-typing .editor-block-list__empty-block-inserter,
@@ -100,12 +106,6 @@
 
 	&.is-reusable.is-selected > .editor-block-mover:before {
 		border-right: none;
-	}
-
-	&.is-selected > .editor-block-settings-menu:before,
-	&.is-hovered > .editor-block-settings-menu:before {
-		border-left: 1px solid $light-gray-500;
-		left: 6px;
 	}
 
 	&.is-reusable.is-selected > .editor-block-settings-menu:before {
@@ -163,26 +163,6 @@
 
 	&.is-multi-selected .editor-block-list__block-edit:before {
 		background: $blue-medium-highlight;
-	}
-
-
-	// @todo, this appears to be unused
-	.iframe-overlay {
-		position: relative;
-	}
-
-	.iframe-overlay:before {
-		content: '';
-		display: block;
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-	}
-
-	&.is-selected .iframe-overlay:before {
-		display: none;
 	}
 
 
@@ -340,23 +320,36 @@
 			border-bottom: 3px solid $blue-medium-500;
 		}
 	}
+}
 
 
-	/**
-	 * Left and right side UI
-	 */
+/**
+ * Left and right side UI
+ */
 
+.editor-block-list__block {
+
+	// Left and right
 	> .editor-block-settings-menu,
 	> .editor-block-mover {
 		position: absolute;
 		top: 0;
 		padding: 0;
+		width: $block-side-ui-width;
+		height: 100%; // increase hoverable area
+
+		background: rgba(255,0,0,.1); // debug
+
+		// elevate when selected or hovered
+		.is-selected &,
+		.is-hovered & {
+			z-index: 9999;	// @todo
+		}
 	}
 
 	// Right side UI
 	> .editor-block-settings-menu {
-		right: #{ -1 * $block-mover-margin - $block-padding + 2px };
-		padding-top: 2px;
+		right: -$block-side-ui-width;
 
 		// Mobile
 		display: none;
@@ -368,8 +361,7 @@
 
 	// Left side UI
 	> .editor-block-mover {
-		left: -$block-mover-margin - $block-padding + 4px;
-		padding-top: 6px;
+		left: -$block-side-ui-width;
 		z-index: z-index( '.editor-block-mover' );
 
 		// Mobile
@@ -379,7 +371,7 @@
 		}
 	}
 
-	// Mobile tools
+	// Show side UI inline below the block on mobile
 	.editor-block-list__block-mobile-toolbar {
 		display: flex;
 		flex-direction: row;
@@ -425,6 +417,11 @@
 		}
 	}
 }
+
+
+/**
+ * In-Canvas Inserter
+ */
 
 .editor-block-list .editor-inserter {
 	margin: $item-spacing;
