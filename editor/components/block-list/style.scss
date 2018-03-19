@@ -337,6 +337,7 @@
 		padding: 0;
 		width: $block-side-ui-width;
 		height: 100%; // increase hoverable area
+		//margin-top: -1px; // stack borders on nested side UI
 	}
 
 	// Elevate when selected or hovered

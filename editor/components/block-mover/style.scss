@@ -21,6 +21,7 @@
 		background: $white;
 		border-color: $light-gray-500;
 		border-style: solid;
+		margin-top: -1px; // stack top border
 
 		&:first-child {
 			border-width: 1px 1px 0 1px;
